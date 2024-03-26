@@ -1,23 +1,83 @@
-## init project
+# Dummy App - React Native
 
-yarn install (or npm install)
-cd ios/ && pod install
+## Table of Contents
 
-## how to run
+- [Overview](#overview)
+- [Objectives](#objectives)
+- [Installation](#installation)
+- [Training](#training)
 
-Run with following command
-npx react-native run-ios
-And it somehow calls the other console as well…select “i” for iOS
+## Overview
 
-## How to run Android app on Windows 11
+The project is a template for React Native projects.
 
-To run the app on Android, you need to install Android Studio and set up the environment.
-Here are the steps to set up the environment.
+## Objectives
 
-1. [Install Android Studio, and add environment variables for SDK and Platform tools](https://reactnative.dev/docs/environment-setup?guide=native).
-   - Use the Android 13 (Tiramisu) emulator.
-2. Install JDK 11, since it only works with JDK 11.
-   - For switching the default JDK version, please see the [StackOverFlow post](https://stackoverflow.com/questions/54422632/default-java-on-windows-machine).
-3. `yarn install` all dependencies and do not update them.
-4. `yarn react-native run-android` to open the emulator and the JS server. Two command lines will be opened. If it doesn't, kill the command line tools and re-run the command.
-   - When receiving the error `Execution failed for task ':app:installDebug'`, keep the command lines open, and run `yarn react-native run-android` again.
+It is a good starting point for:
+
+1. Analytics project references.
+2. Testing new libraries or features.
+3. Firebase Analytics practices
+4. React Native practices (Android)
+
+## Installation
+
+- Please install Android SDK or [Android Studio](https://developer.android.com/studio). Please upgrade the Java version to 17 or higher.
+- Please be aware of the [minimum Firebase installation requirements](https://firebase.google.com/docs/android/setup); if necessary, you may update the configuration accordingly.
+- [Install Android Studio, and add environment variables (Windows) for SDK and Platform tools](https://reactnative.dev/docs/environment-setup?guide=native).
+- `npm install` all dependencies and do not update them.
+- `npm run android` to open the emulator and the JS server. Two command lines will be opened. If it doesn't, kill the command line tools and re-run the command.
+  - When receiving the error `Execution failed for task ':app:installDebug'`, keep the command lines open, close the app and run `npm run android` again.
+  - If the app is blank and the command line ends after running, please run the command again
+- Configure the Firebase project, but please don't update the dependencies on either Android or IOS
+
+## Training
+
+The analytics implementation is situated in the `libs/utils/analytics.ts` file. There are three events to be implemented:
+
+1. Add to cart
+
+```typescript
+// itemId should be UUID
+await analytics().logAddToCart({
+  value: 200,
+  currency: 'USD',
+  items: [
+    {
+      item_id: 'itemId',
+      item_name: 'Switzerland',
+      item_category: 'Europe',
+      quantity: 1,
+      price: 200,
+    },
+  ],
+});
+```
+
+2. Purchase
+
+```typescript
+// transactionId should be UUID
+await analytics().logAddPurchase({
+  value: 200,
+  transactionId: 'transactionId'
+  currency: 'USD',
+  items: [
+    {
+      item_id: itemId,
+      item_name: 'Switzerland',
+      item_category: 'Europe',
+      quantity: 1,
+      price: 200,
+    },
+  ],
+});
+```
+
+3. bottom navigation
+
+```typescript
+await analytics().logScreenView({
+  screen_name: '$tab_label',
+});
+```
