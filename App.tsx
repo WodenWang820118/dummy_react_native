@@ -1,49 +1,86 @@
 import React from 'react';
-import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  Text,
-  useColorScheme,
-  View,
-  Button,
-} from 'react-native';
+import {NavigationContainer} from '@react-navigation/native';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import {HomeScreen} from './libs/views/home';
+import {DashboardScreen} from './libs/views/dashboard';
+import {NotificationScreen} from './libs/views/notifications';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import {logScreenView} from './libs/utils/analytics';
 
-import {Colors, Header} from 'react-native/Libraries/NewAppScreen';
-import {log_screen_view, log_scroll} from './util/analytics';
+const Tab = createBottomTabNavigator();
 
 function App(): JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  };
-
   return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
-      />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <Header />
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Text>screen_view</Text>
-          <Button
-            title="screen_view"
-            onPress={async () => await log_screen_view()}
-          />
-
-          <Text>scroll</Text>
-          <Button title="scroll" onPress={async () => await log_scroll()} />
-        </View>
-      </ScrollView>
-    </SafeAreaView>
+    <NavigationContainer>
+      <Tab.Navigator initialRouteName="Home">
+        <Tab.Screen
+          name="Home"
+          component={HomeScreen}
+          options={{
+            title: 'Home',
+            tabBarLabel: 'Home',
+            // eslint-disable-next-line react/no-unstable-nested-components
+            tabBarIcon: () => (
+              <Ionicons
+                name="home-outline"
+                size={24}
+                // eslint-disable-next-line react-native/no-inline-styles
+                style={{backgroundColor: 'transparent'}}
+              />
+            ),
+          }}
+          listeners={() => ({
+            tabPress: async () => {
+              await logScreenView('Home');
+            },
+          })}
+        />
+        <Tab.Screen
+          name="Dashboard"
+          component={DashboardScreen}
+          options={{
+            title: 'Dashboard',
+            tabBarLabel: 'Dashboard',
+            // eslint-disable-next-line react/no-unstable-nested-components
+            tabBarIcon: () => (
+              <Ionicons
+                name="clipboard-outline"
+                size={24}
+                // eslint-disable-next-line react-native/no-inline-styles
+                style={{backgroundColor: 'transparent'}}
+              />
+            ),
+          }}
+          listeners={() => ({
+            tabPress: async () => {
+              await logScreenView('Dashboard');
+            },
+          })}
+        />
+        <Tab.Screen
+          name="Notifications"
+          component={NotificationScreen}
+          options={{
+            title: 'Notifications',
+            tabBarLabel: 'Notifications',
+            // eslint-disable-next-line react/no-unstable-nested-components
+            tabBarIcon: () => (
+              <Ionicons
+                name="notifications-outline"
+                size={24}
+                // eslint-disable-next-line react-native/no-inline-styles
+                style={{backgroundColor: 'transparent'}}
+              />
+            ),
+          }}
+          listeners={() => ({
+            tabPress: async () => {
+              await logScreenView('Notifications');
+            },
+          })}
+        />
+      </Tab.Navigator>
+    </NavigationContainer>
   );
 }
 
